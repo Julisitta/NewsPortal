@@ -26,6 +26,7 @@ class EventEmitter {
     emit(topicName, data) {
         if(this._storage[topicName]) {
             this._storage[topicName].forEach(user => user.inform(topicName, data));
+            console.log('dddd');
         }
     }
 }
@@ -106,7 +107,7 @@ myEventEmitter.emit(topic1.name, jur.sendNews(topic1.name));
 myEventEmitter.emit(topic2.name, jur.sendNews(topic2.name));
 myEventEmitter.emit(topic3.name, jur.sendNews(topic3.name));
 
-// jur.interval(myEventEmitter, topics[1]);
+//jur.interval(myEventEmitter, topics1.name);
 
 const server = http.createServer((request, response) => {
     let pathname = url.parse(request.url).pathname
@@ -122,7 +123,7 @@ const server = http.createServer((request, response) => {
                 response.end();
                 break;
             case '/user/user_id':
-                if (user !== []) {
+                if (user.length == 1) {
                     response.writeHead(200, {"Content-Type": "text/plain"});
                     let json = JSON.stringify({user:user[0]})
                     response.end(json)
@@ -133,7 +134,7 @@ const server = http.createServer((request, response) => {
                 }
                 break;
             case '/user/user_id/subscription':
-                if (user !== []) {
+                if (user.length == 1) {
                     response.writeHead(200, {"Content-Type": "text/plain"});
                     let json = JSON.stringify({subscriptions:Object.keys(user[0].storage)})
                     // let json = JSON.stringify({subsData:usere[0].storage})
@@ -145,7 +146,7 @@ const server = http.createServer((request, response) => {
                 }
                 break;
             case '/user/user_id/export':
-                if (user !== []) {
+                if (user.length == 1) {
                     response.writeHead(200, {"Content-Type": "text/plain"});
                     let json = JSON.stringify({subsData:user[0].storage})
                     fs.writeFile('test.txt', json, (err) => {
@@ -160,7 +161,7 @@ const server = http.createServer((request, response) => {
                 }
                 break;
             case '/news/news_id':
-                if (topic !== []) {
+                if (topic.length == 1) {
                     response.writeHead(200, {"Content-Type": "text/plain"});
                     var json = JSON.stringify({news:topic[0]})
                     response.end(json)
@@ -171,7 +172,8 @@ const server = http.createServer((request, response) => {
                 }
                 break;
             case '/news/news_id/subscribe/user_id':
-                if (topic !== [] && user !== []) {
+                if (topic.length == 1 && user.length == 1) {
+                    console.log(user)
                     myEventEmitter.addSubscriber(topic[0].name, user[0])
                     response.writeHead(201, {"Content-Type": "text/plain"});
                     response.end("User subscribed")
@@ -182,7 +184,7 @@ const server = http.createServer((request, response) => {
                 }
                 break;
             case '/news/news_id/unsubscribe/user_id':
-                if (topic !== [] && user !== []) {
+                if (topic.length == 1 && user.length == 1) {
                     myEventEmitter.removeSubscriber(topic[0].name, user[0])
                     response.writeHead(204, {"Content-Type": "text/plain"});
                     response.end("User subscribed")
