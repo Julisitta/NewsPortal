@@ -26,7 +26,6 @@ class EventEmitter {
     emit(topicName, data) {
         if(this._storage[topicName]) {
             this._storage[topicName].forEach(user => user.inform(topicName, data));
-            console.log('dddd');
         }
     }
 }
@@ -44,7 +43,6 @@ class User {
             this.storage[topicName] = [];
         }    
         this.storage[topicName].push(data);
-        console.log(this.storage);
         // console.log(" user " + this.name + " " + this.storage[topicName]);
     }
 }
