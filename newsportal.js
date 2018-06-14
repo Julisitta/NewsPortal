@@ -26,7 +26,6 @@ class EventEmitter {
     emit(topicName, data) {
         if(this._storage[topicName]) {
             this._storage[topicName].forEach(user => user.inform(topicName, data));
-            console.log('dddd');
         }
     }
 }
